@@ -1,0 +1,11 @@
+web1: #component type & number
+    name: wp #component settings
+    shared_writable_dirs:
+        - wp-content/uploads
+    after_build:
+        - "mv pagoda/wp-config.php wp-config.php"
+        - "rm -R pagoda"
+    php_extensions: [mcyrpt, mysqli, mysql, mbstringi, gd]
+
+db1:
+    name: wp-db
