@@ -1,9 +1,9 @@
 === Simple Custom CSS ===
-Contributors: johnregan3, kucrut
+Contributors: johnregan3, dvankooten
 Donate Link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BAG2XC69ZYADQ
 Tags: css, styles, custom css, custom
 Requires at least: 3.0.1
-Tested up to: 3.8.1
+Tested up to: 4.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -14,23 +14,20 @@ Add Custom CSS to your WordPress site without any hassles.
 
 An easy-to-use WordPress Plugin to add custom CSS styles that override Plugin and Theme default styles. This plugin is designed to meet the needs of administrators who would like to add their own CSS to their WordPress website.
 
-**Now Even Simpler!**
+**New in Version 3.2**
 
-**New for Version 3.0**
-
-- Useful Code Syntax Highlighter
-- Checkbox to "Allow Double Quotes" no longer needed
-- Plugin attribution block removed
-- Allows Administrator access on Multisite
+- Improved architecture to reduce the number of queries (Thanks, dvankooten!)
 
 **Features**
 
+- Active Plugin Support
+- Useful Code Syntax Highlighter
 - No configuration needed
 - Simple interface built on WordPress UI
 - Virtually no impact on site performance
 - No complicated database queries
 - Thorough documentation
-- Active Plugin Support
+- Allows Administrator access on Multisite
 
 == Installation ==
 
@@ -49,16 +46,6 @@ Install Simple Custom CSS just as you would any other WP Plugin:
 [More help installing Plugins](http://codex.wordpress.org/Managing_Plugins#Installing_Plugins "WordPress Codex: Installing Plugins")
 
 == Frequently Asked Questions ==
-
-= My Sidebar Options are gone. Help! =
-
-Don't worry, in version 3.0 the sidebar options were removed to streamline the plugin and make it even more... simple.
-
-= Does Simple Custom CSS support using double quotes (")? =
-
-Yes! And you no longer need to click a checkbox to make it happen.
-
-Find more help at the [Simple Custom CSS Wiki](https://github.com/johnregan3/simple-custom-css/wiki "Simple Custom CSS Wiki")
 
 = Will this Plugin work on my WordPress.com website? =
 
@@ -95,6 +82,14 @@ Please check your CSS at the [W3C CSS Validation Service](http://jigsaw.w3.org/c
 1. The Simple Custom CSS Administration Screen
 
 == Changelog ==
+
+= 3.2 =
+* Tested for compatibility with WP 4.1
+* Improved architecture to reduce the number of queries (Thanks, dannyvankooten!)
+
+= 3.0.1 =
+* Tested for compatibility with WP 3.9.1
+* Sidebar "Update CSS" button added
 
 = 3.0 =
 * Added Sytnax Highlighter
@@ -140,6 +135,12 @@ Instead of using print_scripts to insert the CSS directly into the HEAD, CSS sty
 * Inital Release
 
 == Upgrade Notice ==
+
+= 3.2 =
+Tested for compatibility with WP 4.1.  Improved architecture to reduce the number of queries
+
+= 3.0.1 =
+Tested for compatibility with WP 3.9.1.  Sidebar "Update CSS" button added.
 
 = 3.0 =
 Added new Syntax highlighter, removed attribution text and need for "Allow Quotation Marks" option.

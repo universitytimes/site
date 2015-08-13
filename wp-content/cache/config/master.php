@@ -735,5 +735,6 @@ return array(
 	),
 	'plugin.license_key' => '',
 	'plugin.type' => '',
+	'wordpress.home' => 'http://universitytimes.ie',
 	'pgcache.bad_behavior_path' => '',
 );

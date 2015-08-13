@@ -2,9 +2,9 @@
 Contributors: jczorkmid
 Donate link: http://jasonpenney.net/donate
 Tags: javascript, performance, CDN, Google, jQuery, Prototype, MooTools, Dojo, Google AJAX Libraries API, YSlow, Page Speed
-Requires at least: 2.9.1
-Tested up to: 3.6b3
-Stable tag: 1.5.2
+Requires at least: 3.4
+Tested up to: 4.1.3
+Stable tag: 1.6.2.1
 
 Allows your site to use common javascript libraries from Google's AJAX 
 Libraries CDN, rather than from WordPress's own copies.
@@ -36,6 +36,13 @@ you](http://encosia.com/2008/12/10/3-reasons-why-you-should-let-google-host-jque
 * [Prototype](http://www.prototypejs.org/)
 * [script.aculo.us](http://script.aculo.us/)
 * [swfobject](http://code.google.com/p/swfobject/)
+
+= Links =
+
+* [Use Google Libraries Home](http://jasonpenney.net/wordpress-plugins/use-google-libraries/)
+* [Issue Tracker](http://github.com/jpenney/use-google-libraries/issues)
+* [GitHub Repository](http://github.com/jpenney/use-google-libraries)
+* [Support Forum](http://wordpress.org/support/plugin/use-google-libraries)
 
 == Installation ==
 
@@ -92,6 +99,23 @@ point.
 
 == Incompatible Plugins ==
 
+= Better WordPress Minify =
+
+Better WordPress Minify version 1.2.2 does not yet support
+protocol-relative URLs, but [the next release is supposed to correct
+this](http://wordpress.org/support/topic/conflict-with-use-google-libraries-152).
+
+= Gravity Forms = 
+
+I've had reports of Gravity Forms breaking UGL, but I don't have
+access to Gravity Forms, so I'm not sure what's going on.  If you need
+Gravity Forms you might need to disable UGL, or it might be fine, I'm
+not really sure.
+
+= WP-Minify =
+
+WP-Minify doesn't yet support protocol-relative URLs.  Add
+'//ajax.googleapis.com/' as a JS and CSS exclusion.
 
 == Incompatible Themes ==
 
@@ -101,6 +125,24 @@ I've had scattered reports that UGL is stepping out of the way when
 using K2.
 
 == Changelog ==
+
+= 1.6.2.1 =
+
++ Bypass functionality when running under 4.2+ until next version to avoid breaking sites.
+
+= 1.6.2 =
+
++ added some missing jQuery UI modules (hopefully fixes issues from support 
+forums I couldn't reproduce previously).
+
+= 1.6.1 =
+
++ same as 1.6 (due to SVN issue with 1.6)
+
+= 1.6 =
+
++ Drop support for PHP4, and WordPress < 3.4
++ clean up PHP 5.x strict issues
 
 = 1.5.2 =
 
@@ -204,8 +246,9 @@ from  [Peter  Wilson](http://peterwilson.cc/).
 
 == Upgrade Notice ==
 
-= 1.5.2 =
-Better SSL support.  Required for WordPress 3.6!
+= 1.6.2.1 =
+
+Bypass UGL in unsupported versions of WordPress (update now, and UGL will start working again when it's ready).
 
 == A Request ==
 
@@ -247,5 +290,6 @@ which has very similar goals to this plugin.
 
 == Future Plans ==
 
-+ add ability to enable/disable loading from Google for specific libraries
++ add ability to disable protocol relative URLs
++ add ability to disable on frontend and/or admin
 

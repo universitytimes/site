@@ -51,10 +51,18 @@ function insert_useful_banner_manager_shortcode() {
 
     shortcode += ']';
 
-	if(window.tinyMCE) {
-        window.tinyMCE.execInstanceCommand(window.tinyMCE.activeEditor.id, 'mceInsertContent', false, shortcode);
-		tinyMCEPopup.editor.execCommand('mceRepaint');
-		tinyMCEPopup.close();
-	}
+    if ( window.tinyMCE ) {
+        var tmce_ver = window.tinyMCE.majorVersion;
+
+        if ( tmce_ver >= '4' ) {
+            window.tinyMCE.execCommand( 'mceInsertContent', false, shortcode );
+        } else {
+            window.tinyMCE.execInstanceCommand( 'content', 'mceInsertContent', false, shortcode );
+        }
+
+        tinyMCEPopup.editor.execCommand( 'mceRepaint' );
+        tinyMCEPopup.close();
+    }
+
 	return;
 }

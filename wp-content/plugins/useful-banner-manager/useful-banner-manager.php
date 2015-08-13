@@ -3,12 +3,12 @@
 Plugin Name: Useful Banner Manager
 Plugin URI: http://rubensargsyan.com/wordpress-plugin-useful-banner-manager/
 Description: This banner manager plugin helps to manage the banners easily over the WordPress blog. It works with BuddyPress too. <a href="admin.php?page=useful-banner-manager/useful-banner-manager-banners.php">Banner Manager</a>
-Version: 1.3
+Version: 1.5
 Author: Ruben Sargsyan
 Author URI: http://rubensargsyan.com/
 */
 
-/*  Copyright 2013 Ruben Sargsyan (email: info@rubensargsyan.com)
+/*  Copyright 2014 Ruben Sargsyan (email: info@rubensargsyan.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,6 +29,17 @@ $useful_banner_manager_plugin_title = 'Useful Banner Manager';
 $useful_banner_manager_plugin_prefix = 'useful_banner_manager_';
 $useful_banner_manager_table_name = $wpdb->prefix . 'useful_banner_manager_banners';
 
+add_action( 'init', 'useful_banner_manager_init' );
+
+function useful_banner_manager_init() {
+   if ( current_user_can( 'edit_posts' ) || current_user_can( 'edit_pages' ) ) {
+       if ( get_user_option( 'rich_editing' ) == 'true' ) {
+          add_filter( 'mce_external_plugins', 'useful_banner_manager_add_plugin' );
+          add_filter( 'mce_buttons', 'useful_banner_manager_register_button' );
+       }
+   }
+}
+
 add_action( 'plugins_loaded', 'useful_banner_manager_load' );
 
 function useful_banner_manager_load() {
@@ -36,7 +47,7 @@ function useful_banner_manager_load() {
 
     $useful_banner_manager_table_name = $wpdb->prefix . 'useful_banner_manager_banners';
     $useful_banner_manager_plugin_prefix = 'useful_banner_manager_';
-    $useful_banner_manager_version = '1.3';
+    $useful_banner_manager_version = '1.5';
 
 	$charset_collate = '';
 
@@ -84,7 +95,7 @@ function useful_banner_manager_load() {
         $wpdb->query( $create_useful_banner_manager_not_exists_fields );
     }
 
-    if ( $current_version == '1.0'){
+    if ( $current_version == '1.0' ) {
         $create_useful_banner_manager_not_exists_fields = "ALTER TABLE " . $useful_banner_manager_table_name . " ADD banner_alt TEXT NOT NULL AFTER banner_title, ADD link_rel VARCHAR(8) NOT NULL AFTER link_target";
 
         $wpdb->query( $create_useful_banner_manager_not_exists_fields );
@@ -96,13 +107,13 @@ function useful_banner_manager_load() {
         add_option( 'useful_banner_manager_version', $useful_banner_manager_version );
     }
 
-    if( ! file_exists( ABSPATH . 'wp-content/uploads ' ) ) {
-        @mkdir( ABSPATH . 'wp-content/uploads' );
+    $upload_dir = wp_upload_dir();
+
+    if ( ! file_exists( $upload_dir['basedir'] . '/useful_banner_manager_banners' ) ) {
+        @ mkdir( $upload_dir['basedir'] . '/useful_banner_manager_banners' );
     }
 
-    if ( ! file_exists( ABSPATH . 'wp-content/uploads/useful_banner_manager_banners' ) ) {
-        @mkdir( ABSPATH . 'wp-content/uploads/useful_banner_manager_banners' );
-    }
+    load_plugin_textdomain( 'useful-banner-manager', false, 'useful-banner-manager/languages' );
 }
 
 add_action( 'admin_menu', 'useful_banner_manager_menu' );
@@ -178,8 +189,10 @@ function useful_banner_manager_delete_banner( $banner_id ){
 
     $wpdb->query( "DELETE FROM " . $useful_banner_manager_table_name . " WHERE id=" . $banner_id . ";" );
 
-    if ( file_exists( ABSPATH . 'wp-content/uploads/useful_banner_manager_banners/' . $banner_id . '-' . $banner->banner_name . '.' . $banner->banner_type ) ) {
-        unlink( ABSPATH . 'wp-content/uploads/useful_banner_manager_banners/' . $banner_id . '-' . $banner->banner_name . '.' . $banner->banner_type );
+    $upload_dir = wp_upload_dir();
+
+    if ( file_exists( $upload_dir['basedir'] . '/useful_banner_manager_banners/' . $banner_id . '-' . $banner->banner_name . '.' . $banner->banner_type ) ) {
+        unlink( $upload_dir['basedir'] . '/useful_banner_manager_banners/' . $banner_id . '-' . $banner->banner_name . '.' . $banner->banner_type );
     }
 }
 
@@ -220,15 +233,17 @@ function useful_banner_manager_get_available_years(){
 
 function useful_banner_manager_display_banner( $banner ) {
     global $useful_banner_manager_plugin_url;
+
+    $upload_dir = wp_upload_dir();
     ?>
     <div<?php if ( ! empty( $banner->wrapper_id ) ) { echo( ' id="' . $banner->wrapper_id . '"' ); } ?> class="useful_banner_manager_banner<?php if ( ! empty( $banner->wrapper_class ) ) { echo( ' ' . $banner->wrapper_class ); } ?>">
     <?php
     if ( $banner->banner_type == 'swf' ) {
         ?>
         <object width="<?php echo( $banner->banner_width ); ?>" height="<?php echo( $banner->banner_height ); ?>">
-            <param name="movie" value="<?php echo( get_bloginfo( 'wpurl' ) . '/wp-content/uploads/useful_banner_manager_banners/' . $banner->id . '-' . $banner->banner_name . '.' . $banner->banner_type ); ?>" />
+            <param name="movie" value="<?php echo( $upload_dir['baseurl'] . '/useful_banner_manager_banners/' . $banner->id . '-' . $banner->banner_name . '.' . $banner->banner_type ); ?>" />
             <param name="wmode" value="transparent">
-            <embed src="<?php echo( get_bloginfo( 'wpurl' ) . '/wp-content/uploads/useful_banner_manager_banners/' . $banner->id . '-' . $banner->banner_name . '.' . $banner->banner_type ); ?>" width="<?php echo( $banner->banner_width ); ?>" height="<?php echo( $banner->banner_height ); ?>" wmode="transparent"></embed>
+            <embed src="<?php echo( $upload_dir['baseurl'] . '/useful_banner_manager_banners/' . $banner->id . '-' . $banner->banner_name . '.' . $banner->banner_type ); ?>" width="<?php echo( $banner->banner_width ); ?>" height="<?php echo( $banner->banner_height ); ?>" wmode="transparent"></embed>
         </object>
         <?php
     } else {
@@ -238,7 +253,7 @@ function useful_banner_manager_display_banner( $banner ) {
         <?php
         }
     ?>
-    	<img src="<?php bloginfo( 'wpurl' ); ?>/wp-content/uploads/useful_banner_manager_banners/<?php echo( $banner->id . '-' . $banner->banner_name ); ?>.<?php echo( $banner->banner_type ); ?>" width="<?php echo( $banner->banner_width ); ?>" height="<?php echo( $banner->banner_height ); ?>" alt="<?php echo( $banner->banner_alt ); ?>" />
+    	<img src="<?php echo( $upload_dir['baseurl'] ); ?>/useful_banner_manager_banners/<?php echo( $banner->id . '-' . $banner->banner_name ); ?>.<?php echo( $banner->banner_type ); ?>" width="<?php echo( $banner->banner_width ); ?>" height="<?php echo( $banner->banner_height ); ?>" alt="<?php echo( $banner->banner_alt ); ?>" />
         <?php
         if ( $banner->banner_link != '' ) {
         ?>
@@ -255,7 +270,7 @@ class Useful_Banner_Manager_Widget extends WP_Widget {
      function Useful_Banner_Manager_Widget() {
         $widget_opions = array(
             'classname'     => 'useful_banner_manager_widget',
-            'description'   => __( 'UBM banners' )
+            'description'   => 'UBM banners'
         );
 
 		$this->WP_Widget( 'useful-banner-manager-banners', 'UBM banners', $widget_opions );
@@ -320,13 +335,13 @@ class Useful_Banner_Manager_Widget extends WP_Widget {
 
         if ( empty( $banners ) ) {
             ?>
-            <p><?php _e( 'There is no visible banner.', 'useful_banner_manager' ); ?> <a href="admin.php?page=useful-banner-manager/useful-banner-manager-banners.php"><?php _e( 'Add Banners', 'useful_banner_manager' ); ?></a></p>
+            <p><?php _e( 'There is no visible banner.', 'useful-banner-manager' ); ?> <a href="admin.php?page=useful-banner-manager/useful-banner-manager-banners.php"><?php _e( 'Add Banners', 'useful-banner-manager' ); ?></a></p>
             <?php
         } else {
             ?>
-            <p><label><?php _e( 'Title:', 'useful_banner_manager' ); ?> <input class="widefat" name="<?php echo( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo( esc_attr( $title ) ); ?>" /></label></p>
+            <p><label><?php _e( 'Title:', 'useful-banner-manager' ); ?> <input class="widefat" name="<?php echo( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo( esc_attr( $title ) ); ?>" /></label></p>
             <table width="100%" style="border-collapse: collapse">
-                <caption><?php _e( 'Banners', 'useful_banner_manager' ); ?></caption>
+                <caption><?php _e( 'Banners', 'useful-banner-manager' ); ?></caption>
                 <?php
                 foreach ( $banners as $banner ) {
                 ?>
@@ -335,7 +350,7 @@ class Useful_Banner_Manager_Widget extends WP_Widget {
                 }
                 ?>
             </table><br />
-            <p><label><?php _e( 'Number of banners to show:', 'useful_banner_manager' ); ?> <input name="<?php echo( $this->get_field_name( 'count' ) ); ?>" type="text" value="<?php echo( esc_attr( $count ) ); ?>" size="2" /></label></p>
+            <p><label><?php _e( 'Number of banners to show:', 'useful-banner-manager' ); ?> <input name="<?php echo( $this->get_field_name( 'count' ) ); ?>" type="text" value="<?php echo( esc_attr( $count ) ); ?>" size="2" /></label></p>
         <?php
         }
     }
@@ -345,7 +360,7 @@ class Useful_Banner_Manager_Rotation_Widget extends WP_Widget {
      function Useful_Banner_Manager_Rotation_Widget() {
         $widget_opions = array(
             'classname'     => 'useful_banner_manager_rotation_widget',
-            'description'   => __('UBM banners rotation')
+            'description'   => 'UBM banners rotation'
         );
 
 		$this->WP_Widget( 'useful-banner-manager-banners-rotation', 'UBM banners rotation', $widget_opions );
@@ -375,9 +390,11 @@ class Useful_Banner_Manager_Rotation_Widget extends WP_Widget {
         }
 
         if ( ! empty( $banners_ids ) ) {
+            $upload_dir = wp_upload_dir();
+
             $banners = $wpdb->get_results( "SELECT * FROM " . $useful_banner_manager_table_name . " WHERE id IN (" . implode( ',', $banners_ids ) . ") AND (active_until=-1 OR active_until>='" . date( 'Y-m-d' ) . "') AND is_visible='yes' ORDER BY " . $orderby . ";" );
             ?>
-            <div id="<?php echo( $args['widget_id'] ); ?>" class="useful_banner_manager_banners_rotation" style="overflow: hidden; width: <?php echo( $width ); ?>px; height: <?php echo( $height ); ?>px;">
+            <div id="<?php echo( $args['widget_id'] ); ?>" data-interval="<?php echo( ( $interval * 1000 ) ); ?>" class="useful_banner_manager_banners_rotation" style="overflow: hidden; width: <?php echo( $width ); ?>px; height: <?php echo( $height ); ?>px;">
             <?php
             $first_banner = true;
 
@@ -391,7 +408,7 @@ class Useful_Banner_Manager_Rotation_Widget extends WP_Widget {
                     <?php
                     }
                     ?>
-                	<img src="<?php bloginfo( 'wpurl' ); ?>/wp-content/uploads/useful_banner_manager_banners/<?php echo( $banner->id . '-' . $banner->banner_name ); ?>.<?php echo( $banner->banner_type ); ?>" width="<?php echo( $width ); ?>" height="<?php echo( $height ); ?>" alt="<?php echo( $banner->banner_alt ); ?>" />
+                	<img src="<?php echo( $upload_dir['baseurl'] ); ?>/useful_banner_manager_banners/<?php echo( $banner->id . '-' . $banner->banner_name ); ?>.<?php echo( $banner->banner_type ); ?>" width="<?php echo( $width ); ?>" height="<?php echo( $height ); ?>" alt="<?php echo( $banner->banner_alt ); ?>" />
                     <?php
                     if ( $banner->banner_link != '' ) {
                     ?>
@@ -404,22 +421,10 @@ class Useful_Banner_Manager_Rotation_Widget extends WP_Widget {
             }
             ?>
             </div>
-            <script type="text/javascript">
-            jQuery(function($){
-                $(document).ready(function(){
-                    var useful_banner_manager_banners_rotation_block = "<?php echo( $args['widget_id'] ); ?>";
-                    var interval_between_rotations = <?php echo( ( $interval*1000 ) ); ?>;
-
-                    if($("#"+useful_banner_manager_banners_rotation_block+" .useful_banner_manager_rotating_banner").length>1){
-                        setTimeout("useful_banner_manager_rotate_banners('"+useful_banner_manager_banners_rotation_block+"',"+interval_between_rotations+")",interval_between_rotations);
-                    }
-                });
-            });
-            </script>
             <?php
         }
 
-        echo($after_widget);
+        echo( $after_widget );
      }
 
      function update( $new_instance, $old_instance ) {
@@ -489,13 +494,13 @@ class Useful_Banner_Manager_Rotation_Widget extends WP_Widget {
 
         if ( empty( $banners ) ) {
         ?>
-            <p><?php _e( 'There is no visible banner.', 'useful_banner_manager' ); ?> <a href="admin.php?page=useful-banner-manager/useful-banner-manager-banners.php"><?php _e( 'Add Banners', 'useful_banner_manager' ); ?></a></p>
+            <p><?php _e( 'There is no visible banner.', 'useful-banner-manager' ); ?> <a href="admin.php?page=useful-banner-manager/useful-banner-manager-banners.php"><?php _e( 'Add Banners', 'useful-banner-manager' ); ?></a></p>
         <?php
         } else {
             ?>
-            <p><label><?php _e( 'Title:', 'useful_banner_manager' ); ?>	<input class="widefat" id="<?php echo( $this->get_field_id( 'title' ) ); ?>" name="<?php echo( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo( esc_attr( $title ) ); ?>" /></label></p>
+            <p><label><?php _e( 'Title:', 'useful-banner-manager' ); ?>	<input class="widefat" id="<?php echo( $this->get_field_id( 'title' ) ); ?>" name="<?php echo( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo( esc_attr( $title ) ); ?>" /></label></p>
             <table width="100%" style="border-collapse: collapse">
-                <caption><?php _e( 'Banners', 'useful_banner_manager' ); ?></caption>
+                <caption><?php _e( 'Banners', 'useful-banner-manager' ); ?></caption>
                 <?php
                 foreach ( $banners as $banner ) {
                     ?>
@@ -505,10 +510,10 @@ class Useful_Banner_Manager_Rotation_Widget extends WP_Widget {
                 ?>
             </table>
             <br />
-            <p><label><?php _e( 'Interval:', 'useful_banner_manager' ); ?> <input name="<?php echo( $this->get_field_name( 'interval' ) ); ?>" type="text" value="<?php echo( esc_attr( $interval ) ); ?>" size="2" /></label> <?php _e( 'seconds', 'useful_banner_manager' ); ?></p>
-            <p><label><?php _e( 'Width of rotating banners:', 'useful_banner_manager' ); ?> <input name="<?php echo( $this->get_field_name( 'width' ) ); ?>" type="text" value="<?php echo( esc_attr( $width ) ); ?>" size="2" /></label><?php _e( 'px', 'useful_banner_manager' ); ?></p>
-            <p><label><?php _e( 'Height of rotating banners:', 'useful_banner_manager' ); ?> <input name="<?php echo( $this->get_field_name( 'height' ) ); ?>" type="text" value="<?php echo( esc_attr( $height ) ); ?>" size="2" /></label><?php _e( 'px', 'useful_banner_manager' ); ?></p>
-            <p><label><?php _e( 'Order by rand:', 'useful_banner_manager' ); ?> <input class="checkbox" name="<?php echo( $this->get_field_name( 'orderby' ) ); ?>" type="checkbox" value="rand" <?php if ( $instance['orderby'] == 'rand' ) { echo( 'checked="checked"' ); } ?> /></label></p>
+            <p><label><?php _e( 'Interval:', 'useful-banner-manager' ); ?> <input name="<?php echo( $this->get_field_name( 'interval' ) ); ?>" type="text" value="<?php echo( esc_attr( $interval ) ); ?>" size="2" /></label> <?php _e( 'seconds', 'useful-banner-manager' ); ?></p>
+            <p><label><?php _e( 'Width of rotating banners:', 'useful-banner-manager' ); ?> <input name="<?php echo( $this->get_field_name( 'width' ) ); ?>" type="text" value="<?php echo( esc_attr( $width ) ); ?>" size="2" /></label><?php _e( 'px', 'useful-banner-manager' ); ?></p>
+            <p><label><?php _e( 'Height of rotating banners:', 'useful-banner-manager' ); ?> <input name="<?php echo( $this->get_field_name( 'height' ) ); ?>" type="text" value="<?php echo( esc_attr( $height ) ); ?>" size="2" /></label><?php _e( 'px', 'useful-banner-manager' ); ?></p>
+            <p><label><?php _e( 'Order by rand:', 'useful-banner-manager' ); ?> <input class="checkbox" name="<?php echo( $this->get_field_name( 'orderby' ) ); ?>" type="checkbox" value="rand" <?php if ( $instance['orderby'] == 'rand' ) { echo( 'checked="checked"' ); } ?> /></label></p>
             <?php
         }
      }
@@ -550,22 +555,24 @@ function add_useful_banner_manager_banners( $atts ) {
 
     $banners_html = '';
 
-    if( ! empty( $banners ) ){
+    if( ! empty( $banners ) ) {
+        $upload_dir = wp_upload_dir();
+
         foreach ( $banners as $banner ) {
             $banners_html .= '<div' . ( ( empty( $banner->wrapper_id ) ) ? '' : ' id="' . $banner->wrapper_id . '"' ) . ' class="useful_banner_manager_banner' . ( ( empty( $banner->wrapper_class ) ) ? '' : ' ' . $banner->wrapper_class ) . '">';
 
             if ( $banner->banner_type == 'swf' ) {
                 $banners_html .= '<object width="' . $banner->banner_width . '" height="' . $banner->banner_height . '">
-                    <param name="movie" value="' . get_bloginfo( 'wpurl' ) . '/wp-content/uploads/useful_banner_manager_banners/' . $banner->id . '-' . $banner->banner_name . '.' . $banner->banner_type . '" />
+                    <param name="movie" value="' . $upload_dir['baseurl'] . '/useful_banner_manager_banners/' . $banner->id . '-' . $banner->banner_name . '.' . $banner->banner_type . '" />
                     <param name="wmode" value="transparent">
-                    <embed src="' . get_bloginfo( 'wpurl' ) . '/wp-content/uploads/useful_banner_manager_banners/' . $banner->id . '-' . $banner->banner_name . '.' . $banner->banner_type . '" width="' . $banner->banner_width . '" height="' . $banner->banner_height . '" wmode="transparent"></embed>
+                    <embed src="' . $upload_dir['baseurl'] . '/useful_banner_manager_banners/' . $banner->id . '-' . $banner->banner_name . '.' . $banner->banner_type . '" width="' . $banner->banner_width . '" height="' . $banner->banner_height . '" wmode="transparent"></embed>
                 </object>';
             } else {
                 if ( $banner->banner_link != '' ) {
                     $banners_html .= '<a href="' . $banner->banner_link . '" target="' . $banner->link_target . '" rel="' . $banner->link_rel . '">';
                 }
 
-                $banners_html .= '<img src="' . get_bloginfo( 'wpurl' ) . '/wp-content/uploads/useful_banner_manager_banners/' . $banner->id . '-' . $banner->banner_name . '.' . $banner->banner_type . '" width="' . $banner->banner_width . '" height="' . $banner->banner_height . '" alt="' . $banner->banner_alt . '" />';
+                $banners_html .= '<img src="' . $upload_dir['baseurl'] . '/useful_banner_manager_banners/' . $banner->id . '-' . $banner->banner_name . '.' . $banner->banner_type . '" width="' . $banner->banner_width . '" height="' . $banner->banner_height . '" alt="' . $banner->banner_alt . '" />';
 
                 if ( $banner->banner_link != '' ) {
                     $banners_html .= '</a>';
@@ -610,7 +617,7 @@ function add_useful_banner_manager_banners_rotation( $atts ) {
         $height = $atts['height'];
     }
 
-    if ( $atts['orderby'] == 'rand' ) {
+    if ( ! empty( $atts['orderby'] ) && $atts['orderby'] == 'rand' ) {
         $orderby = 'RAND()';
     }else{
         $orderby = 'banner_order, id DESC';
@@ -621,7 +628,9 @@ function add_useful_banner_manager_banners_rotation( $atts ) {
     $banners_rotation_html = '';
 
     if( ! empty( $banners ) ){
-        $banners_rotation_html = '<div id="useful-banner-manager-banners-rotation-n' . $banners_rotation_id . '" class="useful_banner_manager_banners_rotation" style="overflow: hidden; width: ' . $width . 'px; height: ' . $height . 'px;">';
+        $upload_dir = wp_upload_dir();
+
+        $banners_rotation_html = '<div id="useful-banner-manager-banners-rotation-n' . $banners_rotation_id . '" data-interval="' . ( $interval * 1000 ) . '" class="useful_banner_manager_banners_rotation" style="overflow: hidden; width: ' . $width . 'px; height: ' . $height . 'px;">';
 
         $first_banner = true;
 
@@ -640,7 +649,7 @@ function add_useful_banner_manager_banners_rotation( $atts ) {
                 $banners_rotation_html .= '<a href="' . $banner->banner_link . '" target="' . $banner->link_target . '" rel="' . $banner->link_rel . '">';
             }
 
-            $banners_rotation_html .= '<img src="' . get_bloginfo( 'wpurl' ) . '/wp-content/uploads/useful_banner_manager_banners/' . $banner->id . '-' . $banner->banner_name . '.' . $banner->banner_type . '" width="' . $width . '" height="' . $height . '" alt="' . $banner->banner_alt . '" />';
+            $banners_rotation_html .= '<img src="' . $upload_dir['baseurl'] . '/useful_banner_manager_banners/' . $banner->id . '-' . $banner->banner_name . '.' . $banner->banner_type . '" width="' . $width . '" height="' . $height . '" alt="' . $banner->banner_alt . '" />';
 
             if ( $banner->banner_link != '' ) {
                 $banners_rotation_html .= '</a>';
@@ -650,18 +659,6 @@ function add_useful_banner_manager_banners_rotation( $atts ) {
         }
 
         $banners_rotation_html .= '</div>';
-
-        $banners_rotation_html .= '<script type="text/javascript">
-        jQuery(function($){
-            $(document).ready(function(){
-                var useful_banner_manager_banners_rotation_block = "useful-banner-manager-banners-rotation-n' . $banners_rotation_id . '";
-                var interval_between_rotations = ' . ( $interval * 1000 ) . ';
-                if($("#"+useful_banner_manager_banners_rotation_block+" .useful_banner_manager_rotating_banner").length>1){
-                    setTimeout("useful_banner_manager_rotate_banners(\'"+useful_banner_manager_banners_rotation_block+"\',"+interval_between_rotations+")",interval_between_rotations);
-                }
-            });
-        });
-        </script>';
 
         $banners_rotation_id++;
     }
@@ -677,31 +674,18 @@ function useful_banner_manager_banners_rotation( $banners = '', $interval = '', 
     echo( do_shortcode( '[useful_banner_manager_banner_rotation' . ( ( empty( $banners ) ) ? '' : ' banners=' . $banners ) . ( ( empty( $interval ) ) ? '' : ' interval=' . $interval ) . ( ( empty( $width ) ) ? '' : ' width=' . $width ) . ( ( empty( $height ) ) ? '' : ' height=' . $height ) . ( ( empty( $orderby ) ) ? '' : ' orderby=' . $orderby ) . ']' ) );
 }
 
-function register_useful_banner_manager_button( $buttons ) {
-   array_push( $buttons, 'usefulbannermanager' );
+function useful_banner_manager_register_button( $buttons ) {
+    array_push( $buttons, 'usefulbannermanager' );
 
-   return $buttons;
+    return $buttons;
 }
 
-function add_useful_banner_manager_plugin( $plugin_array ) {
+function useful_banner_manager_add_plugin( $plugin_array ) {
     global $useful_banner_manager_plugin_url;
 
-   $plugin_array['usefulbannermanager'] = $useful_banner_manager_plugin_url . 'tinymce/useful-banner-manager.js';
+    $plugin_array['usefulbannermanager'] = $useful_banner_manager_plugin_url . 'tinymce/useful-banner-manager.js';
 
-   return $plugin_array;
-}
-
-add_action( 'init', 'useful_banner_manager_button' );
-
-function useful_banner_manager_button() {
-   if ( ! current_user_can( 'edit_posts' ) && ! current_user_can( 'edit_pages' ) ) {
-      return;
-   }
-
-   if ( get_user_option( 'rich_editing' ) == 'true' ) {
-      add_filter( 'mce_external_plugins', 'add_useful_banner_manager_plugin' );
-      add_filter( 'mce_buttons', 'register_useful_banner_manager_button' );
-   }
+    return $plugin_array;
 }
 
 add_action( 'wp_ajax_useful_banner_manager', 'useful_banner_manager_ajax_tinymce' );

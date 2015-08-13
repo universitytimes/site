@@ -1,9 +1,9 @@
 === Useful Banner Manager ===
 Contributors: s_ruben
 Donate link: http://rubensargsyan.com/donate/
-Tags: banner manager, ads manager, banners, ads, advertisement, buddypress
+Tags: banner manager, ads manager, banner, banners, ads, advertisement, buddypress
 Requires at least: 3.0
-Tested up to: 3.5.1
+Tested up to: 3.9.1
 
 This banner manager plugin helps to manage the banners easily over the WordPress blog. It works with BuddyPress too.
 
@@ -14,6 +14,10 @@ There are many WordPress blogs which have or need to have banners on them. So a 
 P.S.
 
 Wishing you to earn much money by banners advertising. :)
+
+= Translations =
+* Español - Thanks to Maria Ramos from [Webhostinghub.com](http://webhostinghub.com/)
+* Français - Thanks to Therese Lachance
 
 [Plugin Homepage](http://rubensargsyan.com/wordpress-plugin-useful-banner-manager)
 
@@ -44,6 +48,13 @@ For questions contact with the plugin author - [Ruben Sargsyan](http://rubensarg
 1. Manage Banners
 
 == Changelog ==
+
+= 1.5 =
+* The conflict with qTranslate plugin is solved.
+* Fixed some bugs.
+
+= 1.4 =
+* Spanish and French translations are added.
 
 = 1.3 =
 * Added new options for banners - "Wrapper ID" (ID of the tag "div" wrapping the banner) and "Wrapper Class" (Class or classes of the tag "div" wrapping the banner).

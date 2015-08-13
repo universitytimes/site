@@ -1,0 +1,182 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Admin Page Class\n"
+"POT-Creation-Date: 2013-01-09 07:31+0100\n"
+"PO-Revision-Date: 2013-01-09 07:34+0100\n"
+"Last-Translator: Rodolfo Buaiz <brasofilo@gmai.com>\n"
+"Language-Team: WP-EX\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: C:\\wamp\\www\\dev\\hebtest\\wp-content\\plugins\\Admin-"
+"Page-Class\n"
+"X-Poedit-SearchPath-0: C:\\wamp\\www\\dev\\hebtest\\wp-content\\plugins"
+"\\Admin-Page-Class\n"
+
+#: admin-page-class.php:395
+msgid "Allowed Files"
+msgstr "Arquivos permitidos"
+
+#: admin-page-class.php:630 admin-page-class.php:632
+msgid "Insert into Post"
+msgstr "Inserir no Post"
+
+#: admin-page-class.php:630
+msgid "Use this File"
+msgstr "Usar este arquivo"
+
+#: admin-page-class.php:632
+msgid "Use this Image"
+msgstr "Usar esta imagen"
+
+#: admin-page-class.php:664 admin-page-class.php:762
+msgid "Save Changes"
+msgstr "Salvar"
+
+#: admin-page-class.php:677
+msgid "Settings saved."
+msgstr "Configurações guardadas."
+
+#: admin-page-class.php:1138
+msgid "Delete this image"
+msgstr "Excluir esta imagem"
+
+#: admin-page-class.php:1138 admin-page-class.php:1831
+msgid "Delete"
+msgstr "Excluir"
+
+#: admin-page-class.php:1233
+msgid "Cannot delete file. Something's wrong."
+msgstr "Algo falhou ao excluir. "
+
+#: admin-page-class.php:1438 admin-page-class.php:1483
+msgid "Remove"
+msgstr "Remover"
+
+#: admin-page-class.php:1450
+msgid "Add"
+msgstr "Adicionar"
+
+#: admin-page-class.php:1622
+msgid "Select Files"
+msgstr "Selecionar arquivos"
+
+#: admin-page-class.php:1827
+msgid "Uploaded files"
+msgstr "Arquivos guardados"
+
+#: admin-page-class.php:1838
+msgid "Upload new files"
+msgstr "Upload de novos arquivos"
+
+#: admin-page-class.php:1844
+msgid "Add more files"
+msgstr "Adicionar mais arquivos"
+
+#: admin-page-class.php:1864 admin-page-class.php:1897
+#, fuzzy
+msgid "Delete Image"
+msgstr "Excluir esta imagem"
+
+#: admin-page-class.php:1869 admin-page-class.php:1902
+msgid "Upload Image"
+msgstr "Subir imagem"
+
+#: admin-page-class.php:1979 admin-page-class.php:2005
+msgid "Select a color"
+msgstr "Selecione uma cor"
+
+#: admin-page-class.php:3226
+msgid "Export"
+msgstr "Exportar"
+
+#: admin-page-class.php:3227
+msgid ""
+"To export saved settings click the Export button bellow and you will get the "
+"export Code in the box bellow, which you can later use to import."
+msgstr ""
+"Para exportar as configurações guardadas, clique no botão Exportar abaixo e "
+"você terá o código de exportação na caixa de texto. Guarde e use para "
+"importar posteriormente."
+
+#: admin-page-class.php:3229
+msgid "Export Code"
+msgstr "Exportar código"
+
+#: admin-page-class.php:3231
+msgid "Get Export"
+msgstr "Gerar código"
+
+#: admin-page-class.php:3236 admin-page-class.php:3241
+msgid "Import"
+msgstr "Importar"
+
+#: admin-page-class.php:3237
+msgid ""
+"To Import saved settings paste the Export output in to the Import Code box "
+"bellow and click Import."
+msgstr ""
+"Para importar suas configurações guardadas, cole o código na caixa de texto "
+"abaixo e clique Importar."
+
+#: admin-page-class.php:3239
+msgid "Import Code"
+msgstr "Importar código"
+
+#: admin-page-class.php:3266
+msgid "error in ajax request! (1)"
+msgstr "Erro na solicitação de Ajax! (1)"
+
+#: admin-page-class.php:3276
+msgid "error in ajax request! (2)"
+msgstr "Erro na solicitação de Ajax! (2)"
+
+#: admin-page-class.php:3297
+msgid "error in ajax request! (3)"
+msgstr "Erro na solicitação de Ajax! (3)"
+
+#: admin-page-class.php:3309
+msgid "Setting imported, make sure you "
+msgstr "Configurações importadas, assegure-se de"
+
+#: admin-page-class.php:3309
+msgid "Refresh this page"
+msgstr "atualizar esta página"
+
+#: admin-page-class.php:3311
+msgid "Could not import settings! (4)"
+msgstr "Não foi possível importar as configurações! (4)"
+
+#: admin-page-class.php:3332
+msgid "You do not have sufficient permissions to edit templates for this site."
+msgstr "Você não tem persmissões suficientes para editar modelos neste site."
+
+#: admin-page-class.php:3335
+msgid "Error Downloading file."
+msgstr "Erro ao fazer download."
+
+#: admin-page-class.php:3357 admin-page-class.php:3360
+msgid "Download Export"
+msgstr "Download do arquivo de exportação"
+
+#: admin-page-class.php:3427
+msgid "Not Valid "
+msgstr "Inválido"
+
+#: admin-page-class.php:3445
+msgid "Errors in saving changes"
+msgstr "Erro ao gravar as mudanças"
+
+#: admin-page-class.php:3470
+msgid "Unkown Error"
+msgstr "Erro desconhecido"
+
+#, fuzzy
+#~ msgid "Import Export"
+#~ msgstr "Gerar código"
+
+#, fuzzy
+#~ msgid "PlUpload Field"
+#~ msgstr "Arquivos guardados"

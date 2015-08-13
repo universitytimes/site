@@ -12,7 +12,7 @@ $banners = $wpdb->get_results( "SELECT id, banner_name, banner_type, banner_titl
 <html>
 <head>
 	<title>Useful Banner Manager</title>
-	<meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php echo get_option('blog_charset'); ?>" />
+	<meta http-equiv="Content-Type" content="<?php bloginfo( 'html_type' ); ?>; charset=<?php echo( get_option( 'blog_charset' ) ); ?>" />
 	<script language="javascript" type="text/javascript" src="<?php echo( site_url() ); ?>/wp-includes/js/tinymce/tiny_mce_popup.js"></script>
     <script language="javascript" type="text/javascript" src="<?php echo(  $useful_banner_manager_plugin_url ); ?>tinymce/tinymce.js"></script>
 </head>
@@ -20,15 +20,15 @@ $banners = $wpdb->get_results( "SELECT id, banner_name, banner_type, banner_titl
     <?php
     if ( empty( $banners ) ) {
         ?>
-        <p><?php _e( 'There is no visible banner.', 'useful_banner_manager' ); ?> <a href="admin.php?page=useful-banner-manager/useful-banner-manager-banners.php"><?php _e( 'Add Banners', 'useful_banner_manager' ); ?></a></p>
+        <p><?php _e( 'There is no visible banner.', 'useful-banner-manager' ); ?> <a href="admin.php?page=useful-banner-manager/useful-banner-manager-banners.php"><?php _e( 'Add Banners', 'useful-banner-manager' ); ?></a></p>
         <?php
     } else {
         ?>
         <form name="useful_banner_manager" action="#">
         	<div>
-                <p><label style="cursor: pointer;"><?php _e( 'Rotate:', 'useful_banner_manager' ); ?> <input id="rotate" name="rotate" type="checkbox" value="true" onchange="if(this.checked){ document.getElementById('not_for_rotation').style.display='none'; document.getElementById('for_rotation').style.display='block'; }else{ document.getElementById('for_rotation').style.display='none'; document.getElementById('not_for_rotation').style.display='block'; }" style="vertical-align: middle;" /></label></p>
+                <p><label style="cursor: pointer;"><?php _e( 'Rotate:', 'useful-banner-manager' ); ?> <input id="rotate" name="rotate" type="checkbox" value="true" onchange="if(this.checked){ document.getElementById('not_for_rotation').style.display='none'; document.getElementById('for_rotation').style.display='block'; }else{ document.getElementById('for_rotation').style.display='none'; document.getElementById('not_for_rotation').style.display='block'; }" style="vertical-align: middle;" /></label></p>
                 <table width="100%" style="border-collapse: collapse">
-                    <caption style="font-size: 12px;"><?php _e( 'Banners', 'useful_banner_manager' ); ?></caption>
+                    <caption style="font-size: 12px;"><?php _e( 'Banners', 'useful-banner-manager' ); ?></caption>
                     <?php
                     foreach ( $banners as $banner ) {
                     ?>
@@ -38,23 +38,23 @@ $banners = $wpdb->get_results( "SELECT id, banner_name, banner_type, banner_titl
                     ?>
                 </table><br />
                 <div id="not_for_rotation">
-                    <p><label style="cursor: pointer;"><?php _e( 'Number of banners to show:', 'useful_banner_manager' ); ?> <input id="count" name="count" type="text" value="1" size="5" /></label></p>
+                    <p><label style="cursor: pointer;"><?php _e( 'Number of banners to show:', 'useful-banner-manager' ); ?> <input id="count" name="count" type="text" value="1" size="5" /></label></p>
                 </div>
                 <div id="for_rotation" style="display: none;">
-                    <p><label style="cursor: pointer;"><?php _e( 'Interval:', 'useful_banner_manager' ); ?> <input id="interval" name="interval" type="text" value="" size="5" /></label> <?php _e( 'seconds', 'useful_banner_manager' ); ?></p>
-                    <p><label style="cursor: pointer;"><?php _e( 'Width of rotating banners:', 'useful_banner_manager' ); ?> <input id="width" name="width" type="text" value="" size="5" /></label><?php _e( 'px', 'useful_banner_manager' ); ?></p>
-                    <p><label style="cursor: pointer;"><?php _e( 'Height of rotating banners:', 'useful_banner_manager' ); ?> <input id="height" name="height" type="text" value="" size="5" /></label><?php _e( 'px', 'useful_banner_manager' ); ?></p>
-                    <p><label style="cursor: pointer;"><?php _e( 'Order by rand:', 'useful_banner_manager' ); ?> <input id="orderby" name="orderby" type="checkbox" value="rand"style="vertical-align: middle;" /></label></p>
+                    <p><label style="cursor: pointer;"><?php _e( 'Interval:', 'useful-banner-manager' ); ?> <input id="interval" name="interval" type="text" value="" size="5" /></label> <?php _e( 'seconds', 'useful-banner-manager' ); ?></p>
+                    <p><label style="cursor: pointer;"><?php _e( 'Width of rotating banners:', 'useful-banner-manager' ); ?> <input id="width" name="width" type="text" value="" size="5" /></label><?php _e( 'px', 'useful-banner-manager' ); ?></p>
+                    <p><label style="cursor: pointer;"><?php _e( 'Height of rotating banners:', 'useful-banner-manager' ); ?> <input id="height" name="height" type="text" value="" size="5" /></label><?php _e( 'px', 'useful-banner-manager' ); ?></p>
+                    <p><label style="cursor: pointer;"><?php _e( 'Order by rand:', 'useful-banner-manager' ); ?> <input id="orderby" name="orderby" type="checkbox" value="rand"style="vertical-align: middle;" /></label></p>
                 </div>
             </div>
 
         	<div class="mceActionPanel" style="margin-top: 15px; padding-bottom: 30px;">
         		<div style="float: left">
-        			<input type="button" id="cancel" name="cancel" value="<?php _e( 'Cancel', 'useful_banner_manager' ); ?>" onclick="tinyMCEPopup.close();" />
+        			<input type="button" id="cancel" name="cancel" value="<?php _e( 'Cancel', 'useful-banner-manager' ); ?>" onclick="tinyMCEPopup.close();" />
         		</div>
 
         		<div style="float: right">
-        			<input type="submit" id="insert" name="insert" value="<?php _e( 'Insert', 'useful_banner_manager' ); ?>" onclick="insert_useful_banner_manager_shortcode();" />
+        			<input type="submit" id="insert" name="insert" value="<?php _e( 'Insert', 'useful-banner-manager' ); ?>" onclick="insert_useful_banner_manager_shortcode();" />
         		</div>
         	</div>
         </form>

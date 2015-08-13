@@ -13,6 +13,9 @@ if ( file_exists( dirname( __FILE__ ) . '/local-config.php' ) ) {
 	define( 'DB_HOST', 'ohjann.ck2ujq1oigry.eu-west-1.rds.amazonaws.com' ); // Probably 'localhost'
 }
 
+define('WP_HOME','http://localhost/wp');
+define('WP_SITEURL','http://localhost/wp');
+
     /** Database Charset to use in creating database tables. */
     define('DB_CHARSET', 'utf8');
 
