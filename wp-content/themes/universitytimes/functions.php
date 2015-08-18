@@ -90,6 +90,12 @@ if ( ! isset( $content_width ) ) {
 add_image_size( 'bones-thumb-600', 600, 150, true );
 add_image_size( 'bones-thumb-300', 300, 100, true );
 
+//577px wide, unlimited height
+add_image_size( 'homepage-landscape-large', 577, 9999 ); 
+add_image_size( 'homepage-landscape-small', 333, 9999 ); 
+add_image_size( 'homepage-portrait', 9999, 270 );
+add_image_size( 'homepage-portrait-small', 9999, 135 );
+
 /*
 to add more sizes, simply copy a line from above
 and change the dimensions & name. As long as you
@@ -4377,12 +4383,11 @@ function utpostimage_meta_box($post) {
 	
 	
 	  
-	  <input id="upload_postimage" type="hidden" type="text" size="36" name="utpostimage_url" value="<?php 
-		  
-		  
-		  
-		  
-		  echo $utpostimageurl; ?>" />
+	  <input id="upload_postimage" type="hidden" type="text" size="36" name="utpostimage_url" value="<?php echo $utpostimageurl; ?>" />
+
+	  <input id="utpostimage_id" type="hidden" type="text" size="36" name="utpostimage_id" value="<?php 
+		  echo get_post_meta( $post->ID, "utpostimage_id", true ); ?>" />
+
 <input class="button" id="upload_postimage_button" type="button" value="Upload Post Image" style="margin-top: 8px;"/>
 
 
@@ -4494,92 +4499,63 @@ jQuery(document).ready( function( $ ) {
     $('#upload_postimage_button').click(function() {
 	    
 		var frame;
-		uploadID = jQuery(this).prev('input');
         formfield = $('#upload_postimage').attr('name');
         
         
         
         // If the media frame already exists, reopen it.
-    if ( frame ) {
-      frame.open();
-      return;
-    }
+	    if ( frame ) {
+	      frame.open();
+	      return;
+	    }
     
-    // Create a new media frame
-    frame = wp.media({
-      title: 'Select or Upload Media Of Your Chosen Persuasion',
-      button: {
-        text: 'Use this media'
-      },
-      multiple: false  // Set to true to allow multiple files to be selected
-    });
+	    // Create a new media frame
+	    frame = wp.media({
+	      title: 'Select or Upload Media Of Your Chosen Persuasion',
+	      button: {
+	        text: 'Use this media'
+	      },
+	      multiple: false  // Set to true to allow multiple files to be selected
+	    });
     
     
-    // When an image is selected in the media frame...
-    frame.on( 'select', function() {
-      
-      // Get media attachment details from the frame state
-      var attachment = frame.state().get('selection').first().toJSON();
+	    // When an image is selected in the media frame...
+	    frame.on( 'select', function() {
+	      
+	      // Get media attachment details from the frame state
+	      var attachment = frame.state().get('selection').first().toJSON();
 
-      // Send the attachment URL to our custom image input field.
-      
-      
-      
-	  
-	  uploadID.val(attachment.url);
+	      // Send the attachment URL to our custom image input field.
+		   $("#upload_postimage").val(attachment.url);
+		   $("#utpostimage_id").val(attachment.id);
 
-       jQuery("#postimageurladder").attr("src", attachment.url);
-       
-      
+	       jQuery("#postimageurladder").attr("src", attachment.url);
+	       
+	      
 
-        $( "#imageafterdisplay_column" ).hide();
-        
-        $( "#imagebeforesave_column" ).show();
-        
-        $("#upload_postimage_button_clear").removeAttr("disabled");
-          
-      
-      });
+	        $( "#imageafterdisplay_column" ).hide();
+	        
+	        $( "#imagebeforesave_column" ).show();
+	        
+	        $("#upload_postimage_button_clear").removeAttr("disabled");
+	          
+	      
+	      });
 
     // Finally, open the modal on click
     frame.open();
   }); 
        
        
-        
-        
-        
-        
-    
-        
- 
-
-	    
-    
-     $("#upload_postimage_button_clear").click(function() {
-  
-  
-  
-  if (!$("#upload_postimage_button_clear").is(":disabled")) {
-	  
-	  $( "#imageafterdisplay_column" ).hide();
-        
-        $( "#imagebeforesave_column" ).hide();
-        
-        $('#upload_postimage').val('');
-        
-        
-        
-        
-        $("#upload_postimage_button_clear").attr("disabled","disabled");
-	  
-  
-  
-  }    
-       
-    
-
-});
+    $("#upload_postimage_button_clear").click(function() {
+		  if (!$("#upload_postimage_button_clear").is(":disabled")) {
+			  $( "#imageafterdisplay_column" ).hide();
+		        $( "#imagebeforesave_column" ).hide();
+		        $('#upload_postimage').val('');
+		        $('#utpostimage_id').val('');
+		        $("#upload_postimage_button_clear").attr("disabled","disabled");
+		  }    
+	});
   
   
   });
@@ -4648,7 +4624,8 @@ function save_utpostimageurl( $post_id )
  		 		$themeta = get_post_meta($post->ID, 'utpostimage_url', true);
  		 		
 
-	 		
+	 		update_post_meta( $post_id, 'utpostimage_id', $_POST['utpostimage_id'] );
+
 	 		update_post_meta( $post_id, 'utpostimage_url', $_POST['utpostimage_url'] );
 	 		
 	 		update_post_meta( $post_id, 'utpostimage_credit', $_POST['utpostimage_credit'] );

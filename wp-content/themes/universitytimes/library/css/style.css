@@ -3288,6 +3288,19 @@ width: 100%;
 
 }	
 
+.portrait-crop {
+  height: 270px;
+  margin: 0 auto;
+  position: relative;
+  overflow:hidden;
+}
+
+.portrait-crop img {
+  left: 50%;
+  margin-left: -200px;
+  position:absolute;
+}
+
 .onebigimageportrait {
 
 display: block;
@@ -3373,27 +3386,20 @@ margin: 0px 0px 4px 15px;
 		
 		}
 		
-		
-		.one2cropper  {
-	
-	height: 135px;
-	width: 100%;
-	background: none;
-	
-	}
-	
-	
-		.one2cropper img {
-		
-		width: 100%;
-		
-		
-		}
-		
-		
-		
 
-		
+
+.one2cropper {
+  height: 135px;
+  margin: 0 auto;
+  position: relative;
+  overflow:hidden;
+}
+
+.one2cropper img {
+  left: 50%;
+  margin-left: -100px;
+  position:absolute;
+}
 		
 		
 .onebigcropper  {
