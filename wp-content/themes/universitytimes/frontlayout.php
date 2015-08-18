@@ -227,9 +227,10 @@ if ( $my_query->have_posts() ) : ?>
 			<div class="postlink">
 						
 						
-						<?php $utpostimage_url = get_post_meta( $post->ID, "utpostimage_url", true ); 
-							
-							  $utpostimage_position = get_post_meta( $post->ID, "utpostimage_position", true );
+						<?php 
+						$utpostimage_id = get_post_meta( $post->ID, "utpostimage_id", true ); 	
+						$utpostimage_url = get_post_meta( $post->ID, "utpostimage_url", true ); 	
+						$utpostimage_position = get_post_meta( $post->ID, "utpostimage_position", true );
 							
 						?>
 						
@@ -240,66 +241,47 @@ if ( $my_query->have_posts() ) : ?>
 						
 						
 							<?php if ($utpostimage_url != '' && ($utpostimage_position == 'landscaperight' || $utpostimage_position == 'landscapeabove') ) : ?>
-						
-						
-								<a class="onebigimage" href="<?php echo get_permalink(); ?>">
-							
-						
-							
-								<div class="onecropper"> 
 								
-								<img src="<?php echo $utpostimage_url ?>" alt="blank" /> </div>
-							
-								<script>
-											jQuery('.onecropper').imagefill();
-        						</script>
-							
-							
-								<div class="oneimagecaption"><?php echo get_post_meta( $post->ID, "utpostimage_credit", true ); ?></div>
-							
-							
-							
+								<a class="onebigimage" href="<?php echo get_permalink(); ?>">
+									<div class="onecropper"> 
+											<?php if ($utpostimage_id != "") { ?>
+												<?php print wp_get_attachment_image($utpostimage_id, 'homepage-landscape-large'); ?>
+											<?php } else { ?>
+												<img src="<?php echo $utpostimage_url ?>" alt="blank" />
+											<?php } ?>
+									</div>
+									<div class="oneimagecaption"><?php echo get_post_meta( $post->ID, "utpostimage_credit", true ); ?></div>
 								</a>
 
+								<script type="text/javascript">
+											jQuery('.onecropper').imagefill();
+        						</script>
+							<?php endif; ?>
 						
-								<?php endif; ?>
 						
-						
-								<?php if ($utpostimage_url != '' && ($utpostimage_position == 'portraitright' || $utpostimage_position == 'smallportraitleft' || $utpostimage_position == 'bigportraitleft' )) : ?>
+							<?php if ($utpostimage_url != '' && ($utpostimage_position == 'portraitright' || $utpostimage_position == 'smallportraitleft' || $utpostimage_position == 'bigportraitleft' )) : ?>
 						
 								<?php $layoutoffirstarticle = 'portrait'; ?>
 						
-								<a class="onebigimageportrait" href="<?php echo get_permalink(); ?>">
+								<a class="onebigimageportrait" href="<?php echo get_permalink(); ?>">		
+									<div class="portrait-crop"> 
+									
+										<?php if ($utpostimage_id != "") { ?>
+											<?php print wp_get_attachment_image($utpostimage_id, 'homepage-portrait'); ?>
+										<?php } else { ?>z
+											<img src="<?php echo $utpostimage_url ?>" alt="blank" />
+										<?php } ?>
+
+									</div>
+								
+									
 							
-												
-								<div class="onecropper"> 
-			
-								<img src="<?php echo $utpostimage_url ?>" alt="blank" /> </div>
-							
-								<script>
-										jQuery('.onecropper').imagefill();
-								</script>
-							
-							
-								<div class="oneimagecaption"><?php echo get_post_meta( $post->ID, "utpostimage_credit", true ); ?></div>
-							
-							
-							
+									<div class="oneimagecaption"><?php echo get_post_meta( $post->ID, "utpostimage_credit", true ); ?></div>
 								</a>
 
 						
-								<?php endif; ?>
+							<?php endif; ?>
 
-						
-						
-							
-							
-							
-							
-							
-								
-								
-								
 								<div <?php if ($layoutoffirstarticle == 'portrait') echo "class='floaterright'";?>>
 							
 							
@@ -554,74 +536,41 @@ else {
 						<div class="postlink">
 						
 						
-						<?php $utpostimage_url = get_post_meta( $post->ID, "utpostimage_url", true ); 
+						<?php 
+							$utpostimage_id = get_post_meta( $post->ID, "utpostimage_id", true ); 
+							$utpostimage_url = get_post_meta( $post->ID, "utpostimage_url", true ); 
 							$utpostimage_position = get_post_meta( $post->ID, "utpostimage_position", true ); ?>
-						
-						
-						
 
 						
-						
-						
-					<?php if ($utpostimage_url != '' && ($utpostimage_position == 'landscaperight' || $utpostimage_position == 'landscapeabove' )) : ?>
-						
-						
-						
-						
-						<div class="oneright">
-							
-			
-							<a class="" href="<?php echo get_permalink(); ?>">
-							<div class="one2cropper"> <img src="<?php echo $utpostimage_url; ?>" alt="blank" /> </div>
-							
-								<script>
-            jQuery('.one2cropper').imagefill();
-        </script>
-							
-							
-							<div class="oneimagecaption"><?php echo get_post_meta( $post->ID, "utpostimage_credit", true );  ?></div>
-							
-							
-							
-							</div> <!-- end of oneright -->
-							
-							</a>
-						
-						
-						
+						<?php if ($utpostimage_url != '' && ($utpostimage_position == 'landscaperight' || $utpostimage_position == 'landscapeabove' || $utpostimage_position == 'portraitright' || $utpostimage_position == 'smallportraitleft' || $utpostimage_position == 'bigportraitleft' )) : ?>
+								
+							<div class="oneright">
+								
+				
+								<a class="" href="<?php echo get_permalink(); ?>">
+
+									<?php 
+										
+									$utpostimage_url = get_post_meta( $post->ID, "utpostimage_url", true ); 	
+									?>
+									<div class="one2cropper"> 
+										<?php if ($utpostimage_id != "") { ?>
+											<?php print wp_get_attachment_image($utpostimage_id, 'homepage-portrait-small'); ?>
+										<?php } else { ?>
+											<img src="<?php echo $utpostimage_url ?>" alt="blank" />
+										<?php } ?>
+									</div>
+								
+								
+								<div class="oneimagecaption"><?php echo get_post_meta( $post->ID, "utpostimage_credit", true );  ?></div>
+								
+								
+								
+								</div> <!-- end of oneright -->
+								
+								</a>
 						<?php endif; ?>
-						
-						
-						
-						<?php if ($utpostimage_url != '' && ($utpostimage_position == 'portraitright' || $utpostimage_position == 'smallportraitleft' || $utpostimage_position == 'bigportraitleft' )) : ?>
-						
-						<div class="onerightportrait">
-						
-						
-						<a class="" href="<?php echo get_permalink(); ?>">
-							<div class="one2cropper"> <img src="<?php echo $utpostimage_url; ?>" alt="blank" /> </div>
-							
-								<script>
-            jQuery('.one2cropper').imagefill();
-        </script>
-							
-							
-							<div class="oneimagecaption"><?php echo get_post_meta( $post->ID, "utpostimage_credit", true );  ?></div>
-							
-							
-							
-							</div> <!-- end of oneright -->
-							
-							</a>
-						
-						
-						
-						
-						<?php endif; ?>
-						
-						
-						
-						
+					
 							<div class="oneleft">
 							
 							
@@ -900,10 +849,6 @@ if($hours > $post_age_in_hours ) {
 	
 	
 	elseif(1 > $post_age_in_hours) {
-
-
- 
-	
 	
 	$minutes = round($post_age_in_minutes);
 	
@@ -1658,35 +1603,27 @@ else {
 							<div class="postlink">
 							
 							<a href="<?php echo get_permalink(); ?>" class="fourbigimage">
-							
-						
-							
-							<div class="fourcropper"> <img src="http://localhost/wp/wp-content/uploads/2014/05/DSCF2938small-e1400499987179.jpg" alt="blank" /> </div>
-							
-								<script>
-								
-							
-								
-            jQuery('.fourcropper').imagefill();
-            
-            
-           
-            
-            
-            
-        </script>
-							
-							
-							
-							
-							
-							
+								<?php 
+								$utpostimage_id = get_post_meta( $post->ID, "utpostimage_id", true ); 	
+								$utpostimage_url = get_post_meta( $post->ID, "utpostimage_url", true ); 	
+								?>
+								<div class="fourcropper"> 
+									<?php if ($utpostimage_id != "") { ?>
+										<?php print wp_get_attachment_image($utpostimage_id, 'homepage-landscape-small'); ?>
+									<?php } else if ($utpostimage_url != "") { ?>
+										<img src="<?php echo $utpostimage_url ?>" alt="blank" />
+									<?php } ?>
+								</div>
+
+								<script type="text/javascript">
+											jQuery('.fourcropper').imagefill();
+        						</script>
 							</a>
 
 						
 								<h3 class="fourbigheadline"><a href="<?php echo get_permalink(); ?>"><?php the_title(); ?></a></h3>
 								
-										<a href="<?php echo get_permalink(); ?>" class="onebigcaption"><?php 
+								<a href="<?php echo get_permalink(); ?>" class="onebigcaption"><?php 
 								
 								$old_caption = get_post_meta($post->ID, '_visual-subtitle', true);
 								

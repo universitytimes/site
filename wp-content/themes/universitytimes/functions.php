@@ -90,6 +90,12 @@ if ( ! isset( $content_width ) ) {
 add_image_size( 'bones-thumb-600', 600, 150, true );
 add_image_size( 'bones-thumb-300', 300, 100, true );
 
+//577px wide, unlimited height
+add_image_size( 'homepage-landscape-large', 577, 9999 ); 
+add_image_size( 'homepage-landscape-small', 333, 9999 ); 
+add_image_size( 'homepage-portrait', 9999, 270 );
+add_image_size( 'homepage-portrait-small', 9999, 135 );
+
 /*
 to add more sizes, simply copy a line from above
 and change the dimensions & name. As long as you
@@ -4362,69 +4368,67 @@ add_action('add_meta_boxes', 'utpostimageurl_meta_box');
 /* Prints the taxonomy box content */
 function utpostimage_meta_box($post) {
 
-
+   
 ?>
-
+  
   <div>
+    
+ <?php echo '<input type="hidden" name="ut_utpostimage_nonce" id="ut_utpostimage_nonce" value="' . 
+  wp_create_nonce( plugin_basename(__FILE__) ) . '" />'; ?>
+  
+  
+  
+  
+  
+  <div id="imageafterdisplay_column" style="width: 100%; background: none; margin: 10px 0px 0px 0px;<?php       
+    
+    
+      
+        $utpostimageurl = get_post_meta( $post->ID, "utpostimage_url", true );
+          
+          if ($utpostimageurl == ''){
+            
+            echo 'display: none;';
+            
+          }
+          
+          else {
+            
+            $isitblank_postimage = 'no';
+            
+          }
+        
+        
+          
+            
+              
+                
+                  ?>">
+    
+    <img style="width: 100%;" src="<?php echo get_post_meta( $post->ID, "utpostimage_url", true ); ?>" />
+    
+    
+    
+  </div>
+  
+  <div id="imagebeforesave_column" style="width: 100%; background: none; margin: 10px 0px 0px 0px; display: none;">
+    
+    <img id="postimageurladder" style="width: 100%;" src="" />
+    
+    
+    
+  </div>
+  
+  
+  
+  
+    
+    <input id="upload_postimage" type="hidden" type="text" size="36" name="utpostimage_url" value="<?php echo $utpostimageurl; ?>" />
 
- <?php echo '<input type="hidden" name="ut_utpostimage_nonce" id="ut_utpostimage_nonce" value="' .
-		wp_create_nonce( plugin_basename(__FILE__) ) . '" />'; ?>
+    <input id="utpostimage_id" type="hidden" type="text" size="36" name="utpostimage_id" value="<?php 
+      echo get_post_meta( $post->ID, "utpostimage_id", true ); ?>" />
 
-
-
-
-
-    <div id="imageafterdisplay_column" style="width: 100%; background: none; margin: 10px 0px 0px 0px;<?php
-
-
-
-	$utpostimageurl = get_post_meta( $post->ID, "utpostimage_url", true );
-
-	if ($utpostimageurl == ''){
-
-		echo 'display: none;';
-
-	}
-
-	else {
-
-		$isitblank_postimage = 'no';
-
-	}
-
-
-
-
-
-
-	?>">
-
-        <img style="width: 100%;" src="<?php echo get_post_meta( $post->ID, "utpostimage_url", true ); ?>" />
-
-
-
-    </div>
-
-    <div id="imagebeforesave_column" style="width: 100%; background: none; margin: 10px 0px 0px 0px; display: none;">
-
-        <img id="postimageurladder" style="width: 100%;" src="" />
-
-
-
-    </div>
-
-
-
-
-
-      <input id="upload_postimage" type="hidden" type="text" size="36" name="utpostimage_url" value="<?php
-
-
-
-
-	echo $utpostimageurl; ?>" />
 <input class="button" id="upload_postimage_button" type="button" value="Upload Post Image" style="margin-top: 8px;"/>
-
 
 <input class="button" id="upload_postimage_button_clear" type="button" value="Delete" <?php
 
@@ -4532,94 +4536,64 @@ jQuery(document).ready( function( $ ) {
 
 
     $('#upload_postimage_button').click(function() {
-
-        var frame;
-        uploadID = jQuery(this).prev('input');
+      
+    var frame;
         formfield = $('#upload_postimage').attr('name');
-
-
-
+        
+        
+        
         // If the media frame already exists, reopen it.
-    if ( frame ) {
-      frame.open();
-      return;
-    }
-
-    // Create a new media frame
-    frame = wp.media({
-      title: 'Select or Upload Media Of Your Chosen Persuasion',
-      button: {
-        text: 'Use this media'
-      },
-      multiple: false  // Set to true to allow multiple files to be selected
-    });
-
-
-    // When an image is selected in the media frame...
-    frame.on( 'select', function() {
-
-      // Get media attachment details from the frame state
-      var attachment = frame.state().get('selection').first().toJSON();
-
-      // Send the attachment URL to our custom image input field.
-
-
-
-
-      uploadID.val(attachment.url);
-
-       jQuery("#postimageurladder").attr("src", attachment.url);
-
-
-
-        $( "#imageafterdisplay_column" ).hide();
-
-        $( "#imagebeforesave_column" ).show();
-
-        $("#upload_postimage_button_clear").removeAttr("disabled");
-
-
+      if ( frame ) {
+        frame.open();
+        return;
+      }
+    
+      // Create a new media frame
+      frame = wp.media({
+        title: 'Select or Upload Media Of Your Chosen Persuasion',
+        button: {
+          text: 'Use this media'
+        },
+        multiple: false  // Set to true to allow multiple files to be selected
       });
+    
+    
+      // When an image is selected in the media frame...
+      frame.on( 'select', function() {
+        
+        // Get media attachment details from the frame state
+        var attachment = frame.state().get('selection').first().toJSON();
+
+        // Send the attachment URL to our custom image input field.
+       $("#upload_postimage").val(attachment.url);
+       $("#utpostimage_id").val(attachment.id);
+
+         jQuery("#postimageurladder").attr("src", attachment.url);
+         
+        
+
+          $( "#imageafterdisplay_column" ).hide();
+          
+          $( "#imagebeforesave_column" ).show();
+          
+          $("#upload_postimage_button_clear").removeAttr("disabled");
+            
+        
+        });
 
     // Finally, open the modal on click
     frame.open();
+  }); 
+
+  $("#upload_postimage_button_clear").click(function() {
+      if (!$("#upload_postimage_button_clear").is(":disabled")) {
+        $( "#imageafterdisplay_column" ).hide();
+            $( "#imagebeforesave_column" ).hide();
+            $('#upload_postimage').val('');
+            $('#utpostimage_id').val('');
+            $("#upload_postimage_button_clear").attr("disabled","disabled");
+      }    
   });
-
-
-
-
-
-
-
-
-
-
-
-
-     $("#upload_postimage_button_clear").click(function() {
-
-
-
-  if (!$("#upload_postimage_button_clear").is(":disabled")) {
-
-      $( "#imageafterdisplay_column" ).hide();
-
-        $( "#imagebeforesave_column" ).hide();
-
-        $('#upload_postimage').val('');
-
-
-
-
-        $("#upload_postimage_button_clear").attr("disabled","disabled");
-
-
-
-  }
-
-
-
-});
 
 
   });
@@ -4688,6 +4662,7 @@ function save_utpostimageurl( $post_id )
 		$themeta = get_post_meta($post->ID, 'utpostimage_url', true);
 
 
+  update_post_meta( $post_id, 'utpostimage_id', $_POST['utpostimage_id'] );
 
 	update_post_meta( $post_id, 'utpostimage_url', $_POST['utpostimage_url'] );
 
@@ -5101,7 +5076,7 @@ $the_query = new WP_Query( $args ); ?>
 <?php if ( $the_query->have_posts() ) : ?>
 
 <div style="font-weight: bold; margin: 20px 0px 15px 0px; font-size: 15px;">Insert a number been 1 and 25</div>
-
+</form>
 <form id="postlist">
 
 
@@ -5197,64 +5172,57 @@ $the_query = new WP_Query( $args ); ?>
 
         jQuery( "#loadmoreposts" ).click(function() {
 
-
-
-jQuery("#loadmoreeventsgif").css("visibility","visible");
-
-
-
-
-
-
-   jQuery.ajax({
-
-        url: '<?php echo admin_url('admin-ajax.php'); ?>',
-        type: 'post',
-        data: {
-        action: 'ajax_order_more',
-        
-        page_no:  pageno,
-        },
-    success: function( html ) {
-
-
-
-
-        jQuery('#listofposts').append( html );
-
-        jQuery("#loadmoreeventsgif").css("visibility","hidden");
-
-
-
-
-        pageno++
+			jQuery("#loadmoreeventsgif").css("visibility","visible");
 
 
 
 
 
 
-    },
+			  jQuery.ajax({
 
-    error: function( html ){
-    alert('failure');
-  },
-
-
-
-
-});
-
-
+			        url: '<?php echo admin_url('admin-ajax.php'); ?>',
+			        type: 'post',
+			        data: {
+			        action: 'ajax_order_more',
+			        
+			        page_no:  pageno,
+			        },
+			    success: function( html ) {
 
 
-  jQuery('#ajaxpagenumber').val( function(i, oldval) {
-    return ++oldval;
-});
 
-  jQuery("#loadmoreeventsgif").css("visibility","visible");
 
-});
+			        jQuery('#postlist #listofposts tbody').append( html );
+
+			        jQuery("#loadmoreeventsgif").css("visibility","hidden");
+
+
+
+
+			        pageno++
+
+			    },
+
+			    error: function( html ){
+			    alert('failure');
+			  },
+
+
+
+
+			});
+
+
+
+
+	  	jQuery('#ajaxpagenumber').val( function(i, oldval) {
+	    	return ++oldval;
+		});
+
+  		jQuery("#loadmoreeventsgif").css("visibility","visible");
+
+	});
 
 
 
@@ -5270,24 +5238,7 @@ jQuery("#loadmoreeventsgif").css("visibility","visible");
         action: 'ajax_clear_order',
         },
     success: function( html ) {
-
-
-
-
        // jQuery('#listofposts').append( html );
-
-
-
-
-
-
-       
-
-
-
-
-
-
     },
 
     error: function( html ){
@@ -5304,9 +5255,6 @@ jQuery("#loadmoreeventsgif").css("visibility","visible");
 
 
 });
-
-
-
 
 
  jQuery('#postlist').on('submit', function (e) {
